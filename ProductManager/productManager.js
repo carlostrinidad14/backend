@@ -1,20 +1,20 @@
-const fs = require("fs");
+import { json } from "express";
+import fs from "fs";
 
-class ProductManager {
+export default class ProductManager {
   constructor(path) {
     this.path = path;
     this.products = [];
   }
 
   async addProduct(title, description, price, thumbnail, code, stock) {
-    const products = await this.#loadFromFile();
+    this.products = await this.#loadFromFile();
     if (!title || !description || !price || !thumbnail || !code || !stock) {
-      return "Todos los campos son requeridos";
+      throw new Error("Todos los campos son obligatorios");
     }
 
     if (this.products.some((product) => product.code === code)) {
-      console.log("Ya existe un Producto con el mismo codigo: " + code);
-      return "Ya existe un Producto con el mismo codigo: " + code;
+      throw new Error(`Ya existe un Producto con el mismo código: ${code}`);
     }
 
     const id =
@@ -37,7 +37,7 @@ class ProductManager {
   }
 
   async deleteProduct(id) {
-    const products = await this.#loadFromFile();
+    this.products = await this.#loadFromFile();
     if (!this.products.some((product) => product.id === id)) {
       console.log("El producto con ese ID no existe ID: " + id);
       return "El producto con ese ID no existe" + id;
@@ -48,14 +48,18 @@ class ProductManager {
   }
 
   async getProductById(id) {
-    const products = await this.#loadFromFile();
+    this.products = await this.#loadFromFile();
     let product = this.products.find((product) => product.id === id);
-    return product ? product : "Not found";
+    return product ? product : false;
   }
 
   async getProducts() {
-    const products = await this.#loadFromFile();
-    return this.products;
+    if (fs.existsSync(this.path)){
+      this.products = await this.#loadFromFile();
+       return this.products;}
+    else{
+      return []
+    }
   }
 
   async updateProduct(id, updatedProduct) {
@@ -68,7 +72,10 @@ class ProductManager {
   }
 
   async #saveToFile() {
-    await fs.promises.writeFile(this.path, JSON.stringify(this.products));
+    await fs.promises.writeFile(
+      this.path,
+      JSON.stringify(this.products, null, 4)
+    );
   }
 
   async #loadFromFile() {
@@ -80,6 +87,8 @@ class ProductManager {
     }
   }
 }
+
+
 
 //Pruebas
 
@@ -113,26 +122,26 @@ const Prueba = async () => {
   );
   console.log("Productos", await instancia.getProducts());
 
-  //Add Product con el mismo code para verificar que no se puede crear dos prod con mismo code
+ /*  //Add Product con el mismo code para verificar que no se puede crear dos prod con mismo code
   await instancia.addProduct(
     "Prodcto Prueba",
-    "Este es un producto de prueba",
+    "Este es un producto de prueba",S
     200,
     "Sin Imagen",
     "abc123",
     25
-  );
+  ); */
 
   console.log("Productos", await instancia.getProducts());
 
-  await instancia.deleteProduct(1);
+/*   await instancia.deleteProduct(1);
   await instancia.deleteProduct(2);
-  console.log("Productos despues de borrar", await instancia.getProducts());
+  console.log("Productos despues de borrar", await instancia.getProducts()); */
 
   //ID que no existe
-  console.log(await instancia.getProductById(99));
+ /*  console.log(await instancia.getProductById(99));
   //ID que existe
-  console.log(await instancia.getProductById(3));
+  console.log(await instancia.getProductById(3)); */
 
   await instancia.updateProduct(3, {
     title: "Producto Prueba 3 actualizado ",
@@ -146,4 +155,5 @@ const Prueba = async () => {
   console.log("Productos despues de actualizar", await instancia.getProducts());
 };
 
-Prueba();
+/*  Prueba(); */
+ 
