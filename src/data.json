@@ -1,0 +1,39 @@
+[
+    {
+        "id": 3,
+        "title": "Producto 3 actualizado",
+        "description": "Este es un producto de prueba",
+        "code": "code3",
+        "price": 1500,
+        "status": false,
+        "stock": 54,
+        "category": "Categoria",
+        "thumbnail": []
+    },
+    {
+        "id": 4,
+        "title": "Producto Prueba 4",
+        "description": "Este es un producto de prueba",
+        "code": "code2code",
+        "price": 500,
+        "status": true,
+        "stock": 52,
+        "category": "Categoria",
+        "thumbnail": [
+            "urldeimagen.com/1"
+        ]
+    },
+    {
+        "id": 5,
+        "title": "Producto ultima P",
+        "description": "Este es un producto de prueba",
+        "code": "aabbcc112233",
+        "price": 500,
+        "status": true,
+        "stock": 52,
+        "category": "Categoria",
+        "thumbnail": [
+            "urldeimagen.com/1"
+        ]
+    }
+]
