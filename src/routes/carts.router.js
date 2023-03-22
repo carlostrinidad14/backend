@@ -3,8 +3,8 @@ import CartManager from "../cartManager.js";
 import ProductManager from "../productManager.js";
 
 const router = Router();
-const cartManager = new CartManager("./carts.json");
-const productManager = new ProductManager("./data.json");
+const cartManager = new CartManager("../src/carts.json");
+const productManager = new ProductManager("../src/data.json");
 
 // GET de productos por ID de Cart
 router.get("/:id", async (req, res, next) => {
@@ -41,6 +41,7 @@ router.post("/:id/products/:pid", async (req, res, next) => {
     );
     if (!product) {
       res.status(404).send("El producto que desea agregar no está listado");
+      return
     }
     await cartManager.addProductToCart(
       parseInt(req.params.id),

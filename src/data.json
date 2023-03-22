@@ -1,16 +1,5 @@
 [
     {
-        "id": 3,
-        "title": "Producto 3 actualizado",
-        "description": "Este es un producto de prueba",
-        "code": "code3",
-        "price": 1500,
-        "status": false,
-        "stock": 54,
-        "category": "Categoria",
-        "thumbnail": []
-    },
-    {
         "id": 4,
         "title": "Producto Prueba 4",
         "description": "Este es un producto de prueba",
@@ -24,16 +13,25 @@
         ]
     },
     {
-        "id": 5,
-        "title": "Producto ultima P",
-        "description": "Este es un producto de prueba",
-        "code": "aabbcc112233",
-        "price": 500,
+        "id": 10,
+        "title": "desde real",
+        "description": "desde real",
+        "code": "real",
+        "price": "1111",
         "status": true,
-        "stock": 52,
-        "category": "Categoria",
-        "thumbnail": [
-            "urldeimagen.com/1"
-        ]
+        "stock": "1111",
+        "category": "1111",
+        "thumbnail": "1111"
+    },
+    {
+        "id": 11,
+        "title": "TestFinal",
+        "description": "TestFinal",
+        "code": "TestFinal",
+        "price": "50",
+        "status": true,
+        "stock": "111",
+        "category": "TestFinal",
+        "thumbnail": "TestFinal"
     }
 ]

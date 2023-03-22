@@ -1,0 +1,67 @@
+<h2>Lista de productos (Real Time)</h2>
+
+<table id="product-table" border="1">
+  <thead>
+    <tr>
+      <th>Proudcto</th>
+      <th>Precio</th>
+      <th>Eliminar</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each products}}
+      <tr>
+        <td>{{title}}</td>
+        <td>${{price}}</td>
+        <td><button class="delete-product" data-id="{{id}}">Borrar</button></td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<br />
+<hr /><br />
+
+<h2>Agregar Producto</h2>
+
+<form id="create-product-form">
+  <label for="product-title">Title</label>
+  <br />
+  <input type="text" id="product-title" name="title" />
+  <br />
+
+  <label for="product-description">description</label>
+  <br />
+  <input type="text" id="product-description" name="description" />
+  <br />
+
+  <label for="product-code">code</label>
+  <br />
+  <input type="text" id="product-code" name="code" />
+  <br />
+
+  <label for="product-price">price</label>
+  <br />
+  <input type="number" id="product-price" name="price" />
+  <br />
+
+  <label for="product-stock">stock</label>
+  <br />
+  <input type="number" id="product-stock" name="stock" />
+  <br />
+
+  <label for="product-category">category</label>
+  <br />
+  <input type="text" id="product-category" name="category" />
+  <br />
+
+   <label for="product-thumbnail">thumbnail</label>
+  <br />
+  <input type="text" id="product-thumbnail" name="category" />
+  <br />
+
+  <button type="submit">Agregar</button>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
