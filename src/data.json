@@ -13,25 +13,14 @@
         ]
     },
     {
-        "id": 10,
-        "title": "desde real",
-        "description": "desde real",
-        "code": "real",
-        "price": "1111",
+        "id": 5,
+        "title": "asdasdas",
+        "description": "sdasdad",
+        "code": "sdasdada",
+        "price": "3131",
         "status": true,
-        "stock": "1111",
-        "category": "1111",
-        "thumbnail": "1111"
-    },
-    {
-        "id": 11,
-        "title": "TestFinal",
-        "description": "TestFinal",
-        "code": "TestFinal",
-        "price": "50",
-        "status": true,
-        "stock": "111",
-        "category": "TestFinal",
-        "thumbnail": "TestFinal"
+        "stock": "2313",
+        "category": "1313",
+        "thumbnail": "1313"
     }
 ]

@@ -31,8 +31,7 @@ form.addEventListener("submit", (event) => {
   const category = document.querySelector("#product-category").value;
   const thumbnail = document.querySelector("#product-category").value;
 
-  // Envio datos del formulario al server
-  socketClient.emit("createProduct", {
+  const product = {
     title,
     description,
     code,
@@ -41,17 +40,21 @@ form.addEventListener("submit", (event) => {
     stock,
     category,
     thumbnail,
-  });
+  };
+  // Envio datos del formulario al server
+  socketClient.emit("createProduct", product);
   form.reset();
 });
 
 // Escucho para actualizar  la tabla
 socketClient.on("product-list", (products) => {
+  console.log(products);
   const productTable = document.querySelector("#product-table tbody");
   productTable.innerHTML = "";
+  console.log(products);
   products.forEach((product) => {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${product.title}</td><td>$${product.price}</td><td><button class="delete-product" data-id="${product.id}">Borrar</button></td>`;
+    tr.innerHTML = `<td>${product.title}</td><td>$${product.price}</td><td><button class="delete-product" data-id="${product._id}">Borrar</button></td>`;
     productTable.appendChild(tr);
   });
 });
@@ -61,6 +64,7 @@ productTable.addEventListener("click", (event) => {
   if (event.target.classList.contains("delete-product")) {
     const id = event.target.dataset.id;
     //emit para deletear producto
-    socketClient.emit("deleteProduct", parseInt(id));
+
+    socketClient.emit("deleteProduct", { _id: id });
   }
 });

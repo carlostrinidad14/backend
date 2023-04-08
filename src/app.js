@@ -5,7 +5,10 @@ import { __dirname } from "./utils.js";
 import handlebars from "express-handlebars";
 import viewsRouter from "./routes/views.router.js";
 import { Server } from "socket.io";
-import ProductManager from "./productManager.js";
+//import ProductManager from "./dao/productManagerFS.js";
+import ProductManager from "./dao/productManagerMongo.js";
+import "./dao/dbConfig.js";
+import { messagesModel } from "./dao/models/messages.model.js";
 
 const app = express();
 
@@ -35,7 +38,7 @@ const socketServer = new Server(httpServer);
 const productManager = new ProductManager(__dirname + "/data.json");
 
 // obtener los productos del archivo data.json
-const products = await productManager.getProducts();
+let products = await productManager.getProducts();
 
 // Escuchar conexiones
 socketServer.on("connection", (socketClient) => {
@@ -48,16 +51,6 @@ socketServer.on("connection", (socketClient) => {
 
   //crear producto en base a los datos del form en la vista real time
   socketClient.on("createProduct", async (product) => {
-    const {
-      title,
-      description,
-      code,
-      price,
-      status,
-      stock,
-      category,
-      thumbnail,
-    } = product;
     const productsPush = products;
     productsPush.push(product);
 
@@ -68,30 +61,43 @@ socketServer.on("connection", (socketClient) => {
       `El cliente con id: ${socketClient.id} ha creado un producto nuevo`
     );
 
-    await productManager.addProduct(
-      title,
-      description,
-      code,
-      price,
-      status,
-      stock,
-      category,
-      thumbnail
-    );
+    await productManager.addProduct(product);
   });
 
   //elimina producto en real time
   socketClient.on("deleteProduct", async (id) => {
-    const productsPush = products.filter((product) => product.id !== id);
+    products = await productManager.getProducts();
+    const _id = id._id;
+    const productsPush = products.filter((product) => product._id != _id);
 
     socketServer.emit("product-list", productsPush);
 
-    socketClient.emit(
+    socketClient.broadcast.emit(
       "message4",
-      `El cliente con id: ${socketClient.id} ha eliminado un producto con id: ${id}`
+      `El cliente con id: ${socketClient.id} ha eliminado un producto con id: ${_id}`
     );
 
-    await productManager.deleteProduct(id);
+    await productManager.deleteProduct(_id);
+  });
+
+  // socket de chat
+  const infoMensajes = [];
+  socketClient.on("mensaje", async (info) => {
+    infoMensajes.push(info);
+    // Guardar el mensaje en la base de datos
+    const nuevoMensaje = new messagesModel(info);
+    try {
+      await nuevoMensaje.save();
+      console.log("Mensaje guardado en la base de datos");
+    } catch (error) {
+      console.error("Error al guardar el mensaje en la base de datos", error);
+    }
+
+    socketServer.emit("chat", infoMensajes);
+  });
+
+  socketClient.on("usuarioNuevo", (usuario) => {
+    socketClient.broadcast.emit("broadcast", usuario);
   });
 
   //esucha desconexiones

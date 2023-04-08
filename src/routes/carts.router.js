@@ -1,6 +1,8 @@
 import { Router } from "express";
-import CartManager from "../cartManager.js";
-import ProductManager from "../productManager.js";
+//import CartManager from "../dao/cartManagerFS.js";
+import CartManager from "../dao/cartManagerMongo.js";
+//import ProductManager from "../dao/productManagerFS.js";
+import ProductManager from "../dao/productManagerMongo.js";
 
 const router = Router();
 const cartManager = new CartManager("../src/carts.json");
@@ -9,7 +11,7 @@ const productManager = new ProductManager("../src/data.json");
 // GET de productos por ID de Cart
 router.get("/:id", async (req, res, next) => {
   try {
-    const cart = await cartManager.getCartById(parseInt(req.params.id));
+    const cart = await cartManager.getCartById(req.params.id);
     if (!cart) {
       res.status(404).send("Carro no encontrado");
     }
@@ -32,21 +34,16 @@ router.post("/", async (req, res, next) => {
 // agregar product al cart
 router.post("/:id/products/:pid", async (req, res, next) => {
   try {
-    const cart = await cartManager.getCartById(parseInt(req.params.id));
+    const cart = await cartManager.getCartById(req.params.id);
     if (!cart) {
       res.status(404).send("Carro no encontrado");
     }
-    const product = await productManager.getProductById(
-      parseInt(req.params.pid)
-    );
+    const product = await productManager.getProductById(req.params.pid);
     if (!product) {
       res.status(404).send("El producto que desea agregar no está listado");
-      return
+      return;
     }
-    await cartManager.addProductToCart(
-      parseInt(req.params.id),
-      parseInt(req.params.pid)
-    );
+    await cartManager.addProductToCart(req.params.id, req.params.pid);
     res.status(200).send("agregado");
   } catch (error) {
     next(error);
