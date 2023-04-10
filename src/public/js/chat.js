@@ -5,7 +5,7 @@ const formulario = document.getElementById("formulario");
 const inputMensaje = document.getElementById("mensaje");
 const divChat = document.getElementById("chat");
 
-let usuario;
+let user;
 
 // ingreso al chat - colocar el usuario
 Swal.fire({
@@ -18,10 +18,10 @@ Swal.fire({
     }
   },
 }).then((username) => {
-  usuario = username.value;
-  tituloUsuario.innerText = `Hola ${usuario}`;
+  user = username.value;
+  tituloUsuario.innerText = `Hola ${user}`;
   // evento del username ingresado
-  socketClient.emit("usuarioNuevo", usuario);
+  socketClient.emit("usuarioNuevo", user);
   inputMensaje.value = "";
 });
 
@@ -29,17 +29,15 @@ Swal.fire({
 formulario.onsubmit = async (e) => {
   e.preventDefault();
   const info = {
-    user: usuario,
+    user: user,
     message: inputMensaje.value,
   };
   socketClient.emit("mensaje", info);
 };
 
 // chat
-socketClient.on("chat", (mensajes) => {
-  console.log(mensajes);
-
-  const chatParrafo = mensajes
+socketClient.on("chat", (message) => {
+  const chatParrafo = message
     .map((obj) => {
       return `<p>${obj.user}: ${obj.message}</p>`;
     })
