@@ -1,3 +1,4 @@
+
  <title>Productos</title>
   </head>
   <body>
@@ -9,27 +10,27 @@
           <th>Categoría</th>
           <th>Precio</th>
           <th>Stock</th>
+          </th>description</th>
         </tr>
       </thead>
       <tbody>
         {{#each products}}
         <tr>
-          <td>{{this.name}}</td>
-          <td>{{this.category}}</td>
-          <td>{{this.price}}</td>
-          <td>{{this.stock}}</td>
+          <td>{{title}}</td>
+          <td>{{category}}</td>
+          <td>{{price}}</td>
+          <td>{{stock}}</td>
+          <td>{{description}}</td>
+          <td><button>Add Cart</button></td>
         </tr>
         {{/each}}
       </tbody>
     </table>
     <div>
       {{#if prevLink}}
-      <a href="{{prevLink}}">Anterior</a>
+      <a href="{{prevPage}}">Anterior</a>
       {{/if}}
       {{#if nextLink}}
-      <a href="{{nextLink}}">Siguiente</a>
+      <a href="{{nextPage}}">Siguiente</a>
       {{/if}}
 
-
-{{!-- <script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script> --}}

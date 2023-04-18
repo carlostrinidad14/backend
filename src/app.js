@@ -17,7 +17,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
 //handlebars
-app.engine("handlebars", handlebars.engine());
+// Configurar Handlebars
+const hbs = handlebars.create({
+  // Opciones de Handlebars
+  defaultLayout: 'main',
+  extname: '.handlebars',
+  // Opción para deshabilitar la comprobación de propiedad prototipo
+  // en tiempo de ejecución
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  },
+});
+app.engine("handlebars", hbs.engine);
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 

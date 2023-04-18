@@ -1,0 +1,28 @@
+ <title>cart {{id}}</title>
+  </head>
+  <body>
+    <h1>cart {{id}}</h1>
+    <h2>Contenido del cart</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>qty</th>
+        
+        </tr>
+      </thead>
+      <tbody>
+        {{#each products}}
+        <tr>
+          <td>{{this.product.title}}</td>
+          <td>{{this.product.category}}</td>
+          <td>{{this.product.price}}</td>
+          <td>{{this.qty}}</td>
+        
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
