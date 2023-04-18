@@ -1,0 +1,35 @@
+ <title>Productos</title>
+  </head>
+  <body>
+    <h1>Productos</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each products}}
+        <tr>
+          <td>{{this.name}}</td>
+          <td>{{this.category}}</td>
+          <td>{{this.price}}</td>
+          <td>{{this.stock}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <div>
+      {{#if prevLink}}
+      <a href="{{prevLink}}">Anterior</a>
+      {{/if}}
+      {{#if nextLink}}
+      <a href="{{nextLink}}">Siguiente</a>
+      {{/if}}
+
+
+{{!-- <script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script> --}}

@@ -34,7 +34,7 @@ router.post("/", async (req, res, next) => {
 // agregar product al cart
 router.post("/:id/products/:pid", async (req, res, next) => {
   try {
-    const cart = await cartManager.getCartById(req.params.id);
+    let cart = await cartManager.getCartById(req.params.id);
     if (!cart) {
       res.status(404).send("Carro no encontrado");
     }
@@ -44,7 +44,67 @@ router.post("/:id/products/:pid", async (req, res, next) => {
       return;
     }
     await cartManager.addProductToCart(req.params.id, req.params.pid);
-    res.status(200).send("agregado");
+    cart = await cartManager.getCartById(req.params.id);
+    res.status(200).json(cart);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Eliminar product de un cart
+router.delete("/:id/products/:pid", async (req, res, next) => {
+  try {
+    let cart = await cartManager.getCartById(req.params.id);
+    if (!cart) {
+      res.status(404).send("Carro no encontrado");
+    }
+    const product = await productManager.getProductById(req.params.pid);
+    if (!product) {
+      res
+        .status(404)
+        .send("El producto que desea eliminar no está en el carro");
+      return;
+    }
+    await cartManager.removeProductFromCart(req.params.id, req.params.pid);
+    cart = await cartManager.getCartById(req.params.id);
+    res.status(200).json(cart);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Actualizar la qty de un product de un cart
+router.put("/:id/products/:pid", async (req, res, next) => {
+  try {
+    let cart = await cartManager.getCartById(req.params.id);
+    if (!cart) {
+      res.status(404).send("Carro no encontrado");
+    }
+    const product = await productManager.getProductById(req.params.pid);
+    if (!product) {
+      res
+        .status(404)
+        .send("El producto que desea actualizar no está en el carro");
+      return;
+    }
+    await cartManager.updateProductQtyInCart(req.params.id, req.params.pid, req.body);
+    cart = await cartManager.getCartById(req.params.id);
+    res.status(200).json(cart);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Eliminar product de un cart
+router.delete("/:id", async (req, res, next) => {
+  try {
+    let cart = await cartManager.getCartById(req.params.id);
+    if (!cart) {
+      res.status(404).send("Carro no encontrado");
+    }
+    await cartManager.removeAllProductsFromCart(req.params.id);
+    cart = await cartManager.getCartById(req.params.id);
+    res.status(200).json(cart);
   } catch (error) {
     next(error);
   }

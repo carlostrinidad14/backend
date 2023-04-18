@@ -33,10 +33,84 @@ export default class ProductManager {
   }
 
   //METODO PARA OBTENER TODOS LOS PRODUCTOS
-  async getProducts() {
+  async getProducts(limit, page, category, stock, sort) {
     try {
-      const allProducts = await productsModel.find().lean();
-      return allProducts;
+      console.log(limit, page, category, stock, sort);
+      if (category && !stock) {
+        const allProducts = await productsModel.paginate(
+          { category: category },
+          {
+            limit,
+            page,
+            sort: { price: sort === "desc" ? -1 : 1 }, // ordena por precio ascendente (1) o descendente (-1) dependiendo del parámetro 'sort'
+          }
+        );
+        const info = {
+          count: allProducts.totalDocs,
+          totalPages: allProducts.totalPages,
+          nextPage: allProducts.nextPage,
+          prevPage: allProducts.prevPage,
+          page: allProducts.page,
+          hasPrevPage: allProducts.hasPrevPage,
+          hasNextPage: allProducts.hasNextPage,
+          nextLink: allProducts.hasNextPage
+            ? `http://localhost:8080/api/products?limit=${limit}&page=${allProducts.nextPage}`
+            : null,
+          prevLink: allProducts.hasPrevPage
+            ? `http://localhost:8080/api/products?limit=${limit}&page=${allProducts.prevPage}`
+            : null,
+        };
+        return { info, allProducts: allProducts.docs };
+      } else if (category && stock) {
+        const allProducts = await productsModel.paginate(
+          { category: category, stock: stock },
+          { limit, page, sort: { price: sort === "desc" ? -1 : 1 } }
+        );
+        return allProducts;
+      } else if (stock && !category) {
+        const allProducts = await productsModel.paginate(
+          { stock: stock },
+          { limit, page, sort: { price: sort === "desc" ? -1 : 1 } }
+        );
+        const info = {
+          count: allProducts.totalDocs,
+          totalPages: allProducts.totalPages,
+          nextPage: allProducts.nextPage,
+          prevPage: allProducts.prevPage,
+          page: allProducts.page,
+          hasPrevPage: allProducts.hasPrevPage,
+          hasNextPage: allProducts.hasNextPage,
+          nextLink: allProducts.hasNextPage
+            ? `http://localhost:8080/api/products?limit=${limit}&page=${allProducts.nextPage}`
+            : null,
+          prevLink: allProducts.hasPrevPage
+            ? `http://localhost:8080/api/products?limit=${limit}&page=${allProducts.prevPage}`
+            : null,
+        };
+        return { info, allProducts: allProducts.docs };
+      }
+      if (limit) {
+        const allProducts = await productsModel.paginate(
+          {},
+          { limit, page, sort: { price: sort === "desc" ? -1 : 1 } }
+        );
+        const info = {
+          count: allProducts.totalDocs,
+          totalPages: allProducts.totalPages,
+          nextPage: allProducts.nextPage,
+          prevPage: allProducts.prevPage,
+          page: allProducts.page,
+          hasPrevPage: allProducts.hasPrevPage,
+          hasNextPage: allProducts.hasNextPage,
+          nextLink: allProducts.hasNextPage
+            ? `http://localhost:8080/api/products?limit=${limit}&page=${allProducts.nextPage}`
+            : null,
+          prevLink: allProducts.hasPrevPage
+            ? `http://localhost:8080/api/products?limit=${limit}&page=${allProducts.prevPage}`
+            : null,
+        };
+        return { info, allProducts: allProducts.docs };
+      }
     } catch (error) {
       console.log(error);
     }

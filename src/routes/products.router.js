@@ -8,10 +8,15 @@ const productManager = new ProductManager("../src/data.json");
 // Obtener todos los productos
 router.get("/", async (req, res, next) => {
   try {
-    const products = await productManager.getProducts();
-    let limit = req.query.limit ? parseInt(req.query.limit) : undefined;
-    let result = products.slice(0, limit);
-    res.json({ productos: result });
+    const { limit = 10, page = 1, category, stock, sort } = req.query;
+    const products = await productManager.getProducts(
+      limit,
+      page,
+      category,
+      stock,
+      sort
+    );
+    res.json({ productos: products });
   } catch (error) {
     next(error);
   }
