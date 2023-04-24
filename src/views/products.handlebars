@@ -3,6 +3,12 @@
   </head>
   <body>
     <h1>Productos</h1>
+    <h2>Lista de productos</h2>
+    <h3>{{#if email}}
+      Bienvenido {{email}} - <a href="/views/logout">Cerrar sesión</a>
+      {{else}}
+      Usuario no logueado - <a href="/views">Iniciar sesión</a>
+      {{/if}}</h3>
     <table>
       <thead>
         <tr>

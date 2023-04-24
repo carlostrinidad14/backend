@@ -110,5 +110,4 @@ export default class CartManager {
     } catch (error) {
       console.log(error);
     }
-  }
-}
+  }}

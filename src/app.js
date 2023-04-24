@@ -9,19 +9,25 @@ import { Server } from "socket.io";
 import ProductManager from "./dao/productManagerMongo.js";
 import "./dao/dbConfig.js";
 import { messagesModel } from "./dao/models/messages.model.js";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import mongoStore from "connect-mongo";
+import usersRouter from "./routes/users.router.js";
 
 const app = express();
 
+// MIDDLEWARES
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
+app.use(cookieParser());
 
 //handlebars
 // Configurar Handlebars
 const hbs = handlebars.create({
   // Opciones de Handlebars
-  defaultLayout: 'main',
-  extname: '.handlebars',
+  defaultLayout: "main",
+  extname: ".handlebars",
   // Opción para deshabilitar la comprobación de propiedad prototipo
   // en tiempo de ejecución
   runtimeOptions: {
@@ -33,12 +39,27 @@ app.engine("handlebars", hbs.engine);
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
+// mongo session
+app.use(
+  session({
+    secret: "sessionKey",
+    resave: false,
+    saveUninitialized: true,
+    store: new mongoStore({
+      mongoUrl:
+        "mongodb+srv://carlostrinidad:coderHouse2023@cluster0.n3qmyw6.mongodb.net/ecommerce?retryWrites=true&w=majority",
+    }),
+  })
+);
+
 //Routes
 app.use("/api/products", productRouter);
 
 app.use("/api/carts", cartRouter);
 
 app.use("/views", viewsRouter);
+
+app.use("/users", usersRouter);
 
 const httpServer = app.listen(8080, () => {
   console.log("Servidor escuchando en el puerto 8080");
