@@ -26,7 +26,8 @@ router.get("/chat", (req, res) => {
 });
 
 router.get("/products", async (req, res) => {
-  const email = req.session.email;
+  console.log(req);
+  const email = req.user.email;
   const page = req.query.page ? parseInt(req.query.page) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
   const category = req.query.category ? req.query.category : null;

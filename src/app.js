@@ -13,6 +13,8 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import mongoStore from "connect-mongo";
 import usersRouter from "./routes/users.router.js";
+import "./passport/passportStrategies.js";
+import passport from "passport";
 
 const app = express();
 
@@ -51,6 +53,10 @@ app.use(
     }),
   })
 );
+
+// passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Routes
 app.use("/api/products", productRouter);
