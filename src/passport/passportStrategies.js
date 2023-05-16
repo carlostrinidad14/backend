@@ -6,6 +6,7 @@ import UsersManager from "../dao/usersManager.js";
 const usersManager = new UsersManager();
 import { hashData } from "../utils.js";
 
+
 //Estrategia de passport para registro
 passport.use(
   "registro",
@@ -22,7 +23,6 @@ passport.use(
         password: hashPassword,
       };
       const newUserDb = await usersManager.createUser(newUser);
-
       if (newUserDb) {
         return done(null, newUserDb);
       } else {
@@ -79,11 +79,10 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+   done(null, user.user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
-  console.log(id);
   const user = await userModel.findById(id);
   done(null, user);
 });

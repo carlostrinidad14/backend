@@ -1,5 +1,9 @@
 import { userModel } from "./models/users.model.js";
 import { compareData } from "../utils.js";
+import jwt from "jsonwebtoken";
+import { generateToken } from "../utils.js";
+
+const secretKeyJWT = "secretKeyJWT";
 
 export default class UsersManager {
   // funcion para crear usuario
@@ -10,7 +14,9 @@ export default class UsersManager {
       const existeUsuario = await userModel.find({ email });
       if (existeUsuario.length === 0) {
         const newUser = await userModel.create(user);
-        return newUser;
+        const token = generateToken({ userId: newUser._id });
+
+        return { user: newUser, token };
       } else {
         return null;
       }
@@ -30,7 +36,9 @@ export default class UsersManager {
         // comparamos la password ingresada con la password hasheada
         const isMatch = await compareData(password, usuario.password);
         if (isMatch) {
-          return usuario;
+          const token = generateToken({ userId: usuario._id });
+
+          return { user: usuario, token };
         } else {
           return null;
         }

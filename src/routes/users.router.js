@@ -5,11 +5,21 @@ const usersManager = new UsersManager();
 import { hashData } from "../utils.js";
 import passport from "passport";
 
-router.post("/registro", async (req, res) => {
-  passport.authenticate("registro", {
-    successRedirect: "/views/products",
-    failureRedirect: "/views/errorRegistro",
-  });
+router.post("/registro", async (req, res, next) => {
+  passport.authenticate("registro", (err, user) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.redirect("/views/errorRegistro");
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      return res.redirect("/views/products");
+    });
+  })(req, res, next);
 });
 
 router.post(
