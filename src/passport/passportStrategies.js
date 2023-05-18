@@ -5,6 +5,8 @@ import { userModel } from "../dao/models/users.model.js";
 import UsersManager from "../dao/usersManager.js";
 const usersManager = new UsersManager();
 import { hashData } from "../utils.js";
+import { generateToken } from "../utils.js";
+import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt";
 
 //Estrategia de passport para registro
 passport.use(
@@ -37,10 +39,20 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
+      passReqToCallback: true,
     },
-    async (email, password, done) => {
-      const user = await usersManager.loginUser({ email, password });
+    async (req, email, password, done) => {
+      const user = await usersManager.loginUser(
+        {
+          email,
+          password,
+        },
+        req.res
+      );
       if (user) {
+        const token = generateToken({ userId: user.user._id });
+        console.log(token);
+        req.res.cookie("jwt", token, { httpOnly: true });
         return done(null, user);
       } else {
         return done(null, false);
@@ -48,7 +60,6 @@ passport.use(
     }
   )
 );
-
 //estrategia de passport para github
 passport.use(
   new GithubStrategy(
@@ -77,11 +88,41 @@ passport.use(
   )
 );
 
+const cookieExtractor = (req) => {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies.jwt;
+  }
+  return token;
+};
 
+const jwtOptions = {
+  secretOrKey: "secretKeyJWT",
+  jwtFromRequest: cookieExtractor,
+};
 
+passport.use(
+  "current",
+  new JWTStrategy(jwtOptions, async (payload, done) => {
+    try {
+      console.log(payload);
+      // Buscar el usuario asociado al token utilizando el payload
+      const user = await userModel.findById(payload.user.userId);
+      if (user) {
+        // Devolver el usuario al callback "done"
+        done(null, user);
+      } else {
+        // Usuario no encontrado
+        done(null, false);
+      }
+    } catch (error) {
+      done(error, false);
+    }
+  })
+);
 
 passport.serializeUser((user, done) => {
-   done(null, user.user.id);
+  done(null, user.user.id);
 });
 
 passport.deserializeUser(async (id, done) => {

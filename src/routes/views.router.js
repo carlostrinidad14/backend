@@ -9,6 +9,7 @@ import mongoose from "mongoose";
 const router = Router();
 const productManager = new ProductManager(__dirname + "/data.json");
 const cartManager = new CartManager("../src/carts.json");
+import passport from "passport";
 
 /* router.get("/", async (req, res) => {
   const products = await productManager.getProducts();
@@ -26,7 +27,6 @@ router.get("/chat", (req, res) => {
 });
 
 router.get("/products", async (req, res) => {
-  console.log(req);
   const email = req.user.email;
   const page = req.query.page ? parseInt(req.query.page) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
@@ -96,10 +96,11 @@ router.get("/perfil", (req, res) => {
     res.redirect("/views");
     return;
   }
-  res.render("perfil", {email: req.session.email});
+  res.render("perfil", { email: req.session.email });
 });
 
 router.get("/logout", (req, res) => {
+  res.clearCookie("jwt");
   req.session.destroy(() => {
     res.redirect("/views");
   });

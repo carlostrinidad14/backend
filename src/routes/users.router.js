@@ -42,6 +42,23 @@ router.get(
   }
 );
 
+router.get("/current", (req, res, next) => {
+  passport.authenticate("current", { session: false }, (err, user, info) => {
+    if (err) {
+      // Si hay un error durante la autenticación, devolver el error
+      return next(err);
+    }
+
+    if (!user) {
+      // Si no se encuentra un usuario autenticado, devolver un error de autenticación
+      return res.status(401).json({ message: "Usuario no autorizado" });
+    }
+
+    // Si se encuentra un usuario autenticado, devolver los datos del usuario
+    res.json({ user });
+  })(req, res, next);
+});
+
 //login y registro sin passport
 /* router.post("/login", async (req, res) => {
     const { email, password } = req.body;

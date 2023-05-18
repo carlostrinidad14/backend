@@ -30,19 +30,21 @@ export default class UsersManager {
   }
 
   // funcion para loguear usuario
-  async loginUser(user) { // Agrega el parámetro "res" para la respuesta HTTP
+  async loginUser(user, res) {
+    // Agrega el parámetro "res" para la respuesta HTTP
+    /* console.log(user); */
     const { email, password } = user;
     try {
       // buscamos el usuario por email
       const usuario = await userModel.findOne({ email });
+      
       if (usuario) {
         // comparamos la password ingresada con la password hasheada
         const isMatch = await compareData(password, usuario.password);
         if (isMatch) {
           const token = generateToken({ userId: usuario._id });
-  
-         
-          
+
+          res.cookie("jwt", token, { httpOnly: true });
           return { user: usuario, token };
         } else {
           return null;
