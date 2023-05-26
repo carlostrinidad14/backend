@@ -98,7 +98,7 @@ export default class CartManager {
     }
   }
 
-// METODO PARA ELIMINAR TODOS LOS PRODUCTOS DE UN CARRO
+  // METODO PARA ELIMINAR TODOS LOS PRODUCTOS DE UN CARRO
   async removeAllProductsFromCart(id) {
     try {
       const cart = await cartsModel.findById(id);
@@ -110,4 +110,49 @@ export default class CartManager {
     } catch (error) {
       console.log(error);
     }
-  }}
+  }
+
+  // METODO PARA ELIMINAR UN CARRITO
+  async deleteCart(id) {
+    try {
+      const cart = await cartsModel.findById(id);
+      if (cart) {
+        await cart.remove();
+        return { message: "Carrito eliminado" };
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // METODO PARA OBTENER TODOS LOS CARRITOS
+  async getAllCarts() {
+    try {
+      const carts = await cartsModel.find().populate({
+        path: "products.product",
+        model: "Products",
+      });
+      return carts;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // METODO PARA OBTENER TODOS LOS CARRITOS DE UN USUARIO
+  async getAllCartsByUser(userId) {
+    try {
+      const carts = await cartsModel.find({ user: userId }).populate({
+        path: "products.product",
+        model: "Products",
+      });
+      return carts;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+ //
+
+
+
+}

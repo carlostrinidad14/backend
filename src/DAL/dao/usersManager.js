@@ -1,7 +1,7 @@
 import { userModel } from "./models/users.model.js";
-import { compareData } from "../utils.js";
+import { compareData } from "../../utils.js";
 import jwt from "jsonwebtoken";
-import { generateToken } from "../utils.js";
+import { generateToken } from "../../utils.js";
 import cookieParser from "cookie-parser";
 
 const secretKeyJWT = "secretKeyJWT";

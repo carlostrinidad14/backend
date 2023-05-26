@@ -1,8 +1,8 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GithubStrategy } from "passport-github2";
-import { userModel } from "../dao/models/users.model.js";
-import UsersManager from "../dao/usersManager.js";
+import { userModel } from "../DAL/dao/models/users.model.js";
+import UsersManager from "../DAL/dao/usersManager.js";
 const usersManager = new UsersManager();
 import { hashData } from "../utils.js";
 import { generateToken } from "../utils.js";

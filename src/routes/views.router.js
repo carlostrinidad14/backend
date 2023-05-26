@@ -1,9 +1,9 @@
 import { Router } from "express";
-//import ProductManager from "../dao/productManagerFS.js";
-import ProductManager from "../dao/productManagerMongo.js";
-import CartManager from "../dao/cartManagerMongo.js";
+//import ProductManager from "../DAL/dao/productManagerFS.js";
+import ProductManager from "../DAL/dao/productManagerMongo.js";
+import CartManager from "../DAL/dao/cartManagerMongo.js";
 import { __dirname } from "../utils.js";
-import { productsModel } from "../dao/models/products.model.js";
+import { productsModel } from "../DAL/dao/models/products.model.js";
 import mongoose from "mongoose";
 
 const router = Router();

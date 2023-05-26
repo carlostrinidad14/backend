@@ -1,14 +1,15 @@
 import express from "express";
+import config from "./config.js";
 import productRouter from "./routes/products.router.js";
 import cartRouter from "./routes/carts.router.js";
 import { __dirname } from "./utils.js";
 import handlebars from "express-handlebars";
 import viewsRouter from "./routes/views.router.js";
 import { Server } from "socket.io";
-//import ProductManager from "./dao/productManagerFS.js";
-import ProductManager from "./dao/productManagerMongo.js";
-import "./dao/dbConfig.js";
-import { messagesModel } from "./dao/models/messages.model.js";
+//import ProductManager from "./DAL/dao/productManagerFS.js";
+import ProductManager from "./DAL/dao/productManagerMongo.js";
+import "./DAL/dao/dbConfig.js";
+import { messagesModel } from "./DAL/dao/models/messages.model.js";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import mongoStore from "connect-mongo";
@@ -67,8 +68,9 @@ app.use("/views", viewsRouter);
 
 app.use("/users", usersRouter);
 
-const httpServer = app.listen(8080, () => {
-  console.log("Servidor escuchando en el puerto 8080");
+const PORT = config.port;
+const httpServer = app.listen(PORT, () => {
+  console.log(`Servidor escuchando en el puerto  ${PORT}`);
 });
 
 //Socket
