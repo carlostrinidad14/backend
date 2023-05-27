@@ -33,7 +33,7 @@ export default class ProductManager {
   }
 
   //METODO PARA OBTENER TODOS LOS PRODUCTOS
-  async getProducts(limit, page, category, stock, sort) {
+  async getAllProducts(limit, page, category, stock, sort) {
     try {
       if (category && !stock) {
         const allProducts = await productsModel.paginate(

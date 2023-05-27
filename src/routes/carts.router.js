@@ -1,5 +1,4 @@
-// crear el router de carts
-// Path: backend\src\routes\carts.router.js
+
 import { Router } from "express";
 import { getAllCarts, getAllProductsFromCart, addProductToCart, deleteProductFromCart, deleteCart, newCart, getCartById }  from "../controllers/carts.controller.js";
 

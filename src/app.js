@@ -79,7 +79,7 @@ const socketServer = new Server(httpServer);
 const productManager = new ProductManager(__dirname + "/data.json");
 
 // obtener los productos del archivo data.json
-let products = await productManager.getProducts();
+let products = await productManager.getAllProducts();
 
 // Escuchar conexiones
 socketServer.on("connection", (socketClient) => {

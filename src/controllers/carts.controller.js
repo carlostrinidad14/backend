@@ -1,5 +1,4 @@
-//crear el controller de carts
-//Path: backend\src\controllers\carts.controller.js
+
 import * as CartServices from "../services/carts.services.js";
 
 //funcion para obtener todos los carritos
