@@ -35,7 +35,7 @@ router.get("/products", async (req, res) => {
   const sort = req.query.sort ? req.query.sort : "asc";
 
   try {
-    const { info, allProducts } = await productManager.getProducts(
+    const { info, allProducts } = await productManager.getAllProducts(
       limit,
       page,
       category,

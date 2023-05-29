@@ -1,9 +1,42 @@
+//create users.router.js
+// Path: backend\src\routes\users.router.js
+// Objetivo: Rutas para usuarios
 import { Router } from "express";
-import UsersManager from "../DAL/dao/usersManager.js";
-const router = Router();
-const usersManager = new UsersManager();
-import { hashData } from "../utils.js";
 import passport from "passport";
+import { createUser, loginUser } from "../controllers/users.controller.js";
+
+const router = Router();
+
+router.post(
+  "/registro",
+  async (req, res, next) => {
+    passport.authenticate("registro", (err, user) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.redirect("/views/errorRegistro");
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        return res.redirect("/views/products");
+      });
+    })(req, res, next);
+  },
+  createUser
+);
+router.post(
+  "/login",
+  passport.authenticate("login", {
+    successRedirect: "/views/products",
+    failureRedirect: "/views/errorLogin",
+  }),
+  loginUser
+);
+
+/*
 
 router.post("/registro", async (req, res, next) => {
   passport.authenticate("registro", (err, user) => {
@@ -22,13 +55,14 @@ router.post("/registro", async (req, res, next) => {
   })(req, res, next);
 });
 
+
 router.post(
   "/login",
   passport.authenticate("login", {
     successRedirect: "/views/products",
     failureRedirect: "/views/errorLogin",
   })
-);
+); */
 
 router.get(
   "/signUpGithub",
@@ -59,37 +93,6 @@ router.get("/current", (req, res, next) => {
   })(req, res, next);
 });
 
-//login y registro sin passport
-/* router.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-    const user = await usersManager.loginUser({ email, password });
-    if (user) {
-      req.session.email = email;
-      req.session.password = password;
-      if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
-        req.session.admin = true;
-      } else {
-        req.session.admin = false;
-      }
-    res.redirect("/views/products");
-  } else {
-    res.redirect("/views/errorLogin");
-  }
-});
-
- router.post("/registro", async (req, res) => {
-  const user = req.body;
-  const hashPassword = await hashData(user.password);
-  const newUser = {
-    ...user,
-    password: hashPassword,
-  };
-  await usersManager.createUser(newUser);
-  if (newUser) {
-    res.redirect("/views");
-  } else {
-    res.redirect("/views/errorRegistro");
-  }
-}); */
-
 export default router;
+//create users.model.js
+//
